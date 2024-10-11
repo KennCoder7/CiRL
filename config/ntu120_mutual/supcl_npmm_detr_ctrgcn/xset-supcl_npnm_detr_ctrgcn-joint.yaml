@@ -1,0 +1,71 @@
+work_dir: ../work_dir/noiseHAR/ntu120_mutual/supcl_npmm_detr_ctrgcn/xset-joint
+seed: 1
+feeder: feeder.feeder_ntu.Feeder_dual
+train_feeder_args:
+  data_path: /data/wangkun/project/datasets/NTU_dataset/ntu120/mutual/CSet/train_mutual_data.npy
+  label_path: /data/wangkun/project/datasets/NTU_dataset/ntu120/mutual/CSet/train_mutual_label.npy
+  random_rot: True
+  window_size: 64
+  p_interval: [0.5, 1]
+test_feeder_args:
+  data_path: /data/wangkun/project/datasets/NTU_dataset/ntu120/mutual/CSet/test_mutual_data.npy
+  label_path: /data/wangkun/project/datasets/NTU_dataset/ntu120/mutual/CSet/test_mutual_label.npy
+  window_size: 64
+  p_interval: [0.95]
+
+
+# model
+model: net.SupCL_NPNM_DETR.Model
+model_args:
+  base_encoder: net.ctrgcn.Model
+  encoder_args:
+    num_class: 26
+    num_point: 25
+    num_person: 2
+    graph: net.ctrgcn.Graph
+    graph_args:
+      labeling_mode: 'spatial'
+  queue_size: 32768
+  cls_frozen: False
+  mask_out: True
+  momentum: 0.9
+  Temperature: 0.07
+  n_classes: 26
+  d_features: 256
+#  encoder_pretrained: '../work_dir/noiseHAR/ntu60/noisy5-xsub-stgcn/exp1/epoch50_model.pt'
+  encoder_pretrained: ''
+  topk: 1
+  queries_emb_layers: 1
+  cross_attention_args:
+    dim_feature: 256
+    dim_hidden: 256
+    n_layers: 12
+    n_heads: 8
+    dropout: 0.1
+    bool_sa: False
+    bool_res: False
+  contrastive_intra_temperature: 0.07
+
+
+#optim
+weight_decay: 0.0004
+base_lr: 0.1
+lr_decay_type: 'cosine'
+#step: [10, 50]
+#start_epoch: 5
+warmup_epoch: 0
+# training
+device: [0]
+batch_size: 32
+test_batch_size: 32
+num_epoch: 65
+phase: 'train'
+eval_interval: 5
+save_interval: 5
+alpha: 1.0
+beta: 0.5
+gamma: 1.0
+delta: 1.0
+npnm_epoch: 10
+
+

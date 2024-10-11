@@ -1,0 +1,71 @@
+work_dir: ../work_dir/noiseHAR/wl_ntu_xview/supcl_npnm_detr_ctrgcn/exp1
+
+# feeder
+feeder: feeder.feeder.Feeder_wl_dual
+train_feeder_args:
+  data_path: /data/wangkun/project/datasets/NTU60/wl_ntu_xview/persons_5/train1_position.npy
+  label_path: /data/wangkun/project/datasets/NTU60/wl_ntu_xview/persons_5/train1_label.pkl
+  shear_amplitude: 0.5
+  temperal_padding_ratio: 6
+  random_rot_theta: 0.3
+test_feeder_args:
+  data_path: /data/wangkun/project/datasets/NTU60/wl_ntu_xview/persons_5/val2_position.npy
+  label_path: /data/wangkun/project/datasets/NTU60/wl_ntu_xview/persons_5/val2_label.pkl
+  shear_amplitude: -1
+  temperal_padding_ratio: -1
+  random_rot_theta: -1
+
+# model
+model: net.CiRL.Model
+model_args:
+  base_encoder: net.ctrgcn.Model
+  encoder_args:
+    num_class: 60
+    num_point: 25
+    num_person: 5
+    graph: net.ctrgcn.Graph
+    graph_args:
+      labeling_mode: 'spatial'
+  queue_size: 32768
+  cls_frozen: False
+  mask_out: True
+  momentum: 0.9
+  Temperature: 0.07
+  n_classes: 60
+  d_features: 256
+#  encoder_pretrained: '../work_dir/noiseHAR/ntu60/noisy5-xsub-stgcn/exp1/epoch50_model.pt'
+  encoder_pretrained: ''
+  topk: 1
+  queries_emb_layers: 6
+  cross_attention_args:
+    dim_feature: 256
+    dim_hidden: 256
+    n_layers: 6
+    n_heads: 8
+    dropout: 0.1
+    bool_sa: False
+    bool_res: False
+  contrastive_intra_temperature: 0.07
+
+
+#optim
+weight_decay: 0.0001
+base_lr: 0.1
+lr_decay_type: 'cosine'
+#step: [10, 50]
+#start_epoch: 5
+# training
+device: [0]
+batch_size: 32
+test_batch_size: 32
+num_epoch: 50
+phase: 'train'
+eval_interval: 5
+save_interval: 5
+alpha: 1.0
+beta: 0.5
+gamma: 1.0
+delta: 1.0
+npnm_epoch: 10
+
+
