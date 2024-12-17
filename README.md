@@ -1,5 +1,5 @@
 # Causality-inspired Representation Learning
-This is an official PyTorch implementation of "Causality-inspired Representation Learning for Weakly Supervised Skeleton-based Action Recognition" which has been submitted to Neural Networks (Under Review).
+This is an official PyTorch implementation of "Causality-inspired Representation Learning for Weakly Supervised Skeleton-based Action Recognition" which will be submitted.
 
 ## Evaluation
 `python main.py recognition_cirl --config  xx.yaml --weights xx.pt --phase test`  
